@@ -107,26 +107,41 @@ sub seq {
     my %args = @_;
 
     my $fmt = $args{number_format};
-
-    if (defined $args{to}) {
-        if (!defined($fmt) && $args{equal_width}) {
-            my $neg = $args{from} < 0 || $args{to} < 0 || $args{increment} < 0 ? 1:0;
-            my $width_whole = max(length(int($args{from}     )),
-                                  length(int($args{to}       )),
-                                  length(int($args{increment})),
-                              );
-            my $width_frac  = max(length($args{from}      - int($args{from}     )),
-                                  length($args{to}        - int($args{to}       )),
-                                  length($args{increment} - int($args{increment})),
-                              ) - 2;
+    if (!defined($fmt)) {
+        if ($args{equal_width}) {
+            my $neg = $args{from}<0 || $args{to}<0 || $args{increment}<0 ? 1:0;
+            my $width_whole = max(
+                length(int($args{from}     )),
+                length(int($args{to}       )),
+                length(int($args{increment})),
+            );
+            my $width_frac  = max(
+                length($args{from}      - int($args{from}     )),
+                length($args{to}        - int($args{to}       )),
+                length($args{increment} - int($args{increment})),
+            ) - 2;
             $width_frac = 0 if $width_frac < 0;
             $fmt = sprintf("%%0%d.%df",
-                           $width_whole + $width_frac + ($width_frac ? 1:0) + $neg,
+                           $width_whole+$width_frac+($width_frac ? 1:0) + $neg,
                            $width_frac,
                        );
             #say "D:fmt=$fmt";
+        } elsif ($args{from} != int($args{from}) ||
+                     defined($args{to}) && $args{to} != int($args{to}) ||
+                     $args{increment} || int($args{increment})) {
+            # use fixed floating point to avoid showing round-off errors
+            my $width_frac  = max(
+                length($args{from}      - int($args{from}     )),
+                length($args{increment} - int($args{increment})),
+                (defined($args{to}) ?
+                     (length($args{to}-int($args{to}))) : ()),
+            ) - 2;
+            $width_frac = 0 if $width_frac < 0;
+            $fmt = sprintf("%%.%df", $width_frac);
         }
+    }
 
+    if (defined $args{to}) {
         my @res;
         push @res, $args{header} if $args{header};
         my $i = $args{from}+0;
