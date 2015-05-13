@@ -7,13 +7,18 @@ use 5.010001;
 use strict;
 use warnings;
 
+use List::Util qw(max);
+
+our %SPEC;
+
 $SPEC{seq} = {
     v => 1.1,
     summary => 'Rinci-/Perinci::CmdLine-based "seq"-like CLI utility',
     description => <<'_',
 
 This utility is similar to Unix `seq` command, with a few differences: some
-differences in option names, allow infinite stream (when `to` is not specified).
+differences in option names, JSON output, allow infinite stream (when `to` is
+not specified).
 
 _
     args_rels => {
@@ -34,6 +39,10 @@ _
             default => 1,
             cmdline_aliases => {i=>{}},
             pos => 2,
+        },
+        header => {
+            summary => 'Add a header row',
+            schema => 'str*',
         },
         equal_width => {
             summary => 'Equalize width by padding with leading zeros',
@@ -87,31 +96,59 @@ _
             src => 'peri-seq --from -10 --to 0 -n 5',
             src_plang => 'bash',
         },
+        {
+            summary => 'Use with fsql',
+            src => q[peri-seq 1 100 --header num | fsql --add-tsv - --add-csv data.csv 'SELECT num, data1 FROM stdin LEFT JOIN data ON stdin.num=data.num'],
+            src_plang => 'bash',
+        },
     ],
 };
 sub seq {
     my %args = @_;
 
+    my $fmt = $args{number_format};
+
     if (defined $args{to}) {
+        if (!defined($fmt) && $args{equal_width}) {
+            my $neg = $args{from} < 0 || $args{to} < 0 || $args{increment} < 0 ? 1:0;
+            my $width_whole = max(length(int($args{from}     )),
+                                  length(int($args{to}       )),
+                                  length(int($args{increment})),
+                              );
+            my $width_frac  = max(length($args{from}      - int($args{from}     )),
+                                  length($args{to}        - int($args{to}       )),
+                                  length($args{increment} - int($args{increment})),
+                              ) - 2;
+            $width_frac = 0 if $width_frac < 0;
+            $fmt = sprintf("%%0%d.%df",
+                           $width_whole + $width_frac + ($width_frac ? 1:0) + $neg,
+                           $width_frac,
+                       );
+            #say "D:fmt=$fmt";
+        }
+
         my @res;
-        my $i = $args{from};
-        while ($i < $args{to}) {
-            push @res, $i;
+        push @res, $args{header} if $args{header};
+        my $i = $args{from}+0;
+        while ($i <= $args{to}) {
+            push @res, defined($fmt) ? sprintf($fmt, $i) : $i;
             last if defined($args{limit}) && @res >= $args{limit};
             $i += $args{increment};
         }
         return [200, "OK", \@res];
     } else {
         # stream
-        my $i = $args{from};
-        my $j = 0;
+        my $i = $args{from}+0;
+        my $j = $args{header} ? -1 : 0;
+        my $next_i;
         #my $finish;
         my $func = sub {
             #return undef if $finish;
-            $i = $next_i if $j++;
+            $i = $next_i if $j++ > 0;
+            return $args{header} if $j == 0 && $args{header};
             $next_i = $i + $args{increment};
             #$finish = 1 if ...
-            return $i;
+            return defined($fmt) ? sprintf($fmt, $i) : $i;
         };
         return [200, "OK", $func, {stream=>1}];
     }
