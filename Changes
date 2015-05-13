@@ -1,5 +1,10 @@
 Revision history for App-PeriSeq
 
+0.02    2015-05-13 (PERLANCAR)
+
+	- Use fixed floating point format to avoid showing round-off error.
+
+
 0.01    2015-05-13 (PERLANCAR)
 
         - First release.
