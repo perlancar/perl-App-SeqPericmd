@@ -110,6 +110,10 @@ _
             'x.doc.show_result' => 0,
         },
     ],
+    links => [
+        {url=>{'prog:seq'}},
+        {url=>{'prog:numseq'}},
+    ],
 };
 sub seq {
     my %args = @_;
