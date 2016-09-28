@@ -1,4 +1,4 @@
-package App::PeriSeq;
+package App::SeqPericmd;
 
 # DATE
 # VERSION
@@ -63,43 +63,51 @@ _
     examples => [
         {
             summary => 'Generate whole numbers from 1 to 10 (1, 2, ..., 10)',
-            src => 'peri-seq 1 10',
+            src => '[[prog]] 1 10',
             src_plang => 'bash',
+            'x.doc.show_result' => 0,
         },
         {
             summary => 'Generate odd numbers from 1 to 10 (1, 3, 5, 7, 9)',
-            src => 'peri-seq 1 10 2',
+            src => '[[prog]] 1 10 2',
             src_plang => 'bash',
+            'x.doc.show_result' => 0,
         },
         {
             summary => 'Generate 1, 1.5, 2, 2.5, ..., 10',
-            src => 'peri-seq 1 10 -i 0.5',
+            src => '[[prog]] 1 10 -i 0.5',
             src_plang => 'bash',
+            'x.doc.show_result' => 0,
         },
         {
             summary => 'Generate stream 1, 1.5, 2, 2.5, ...',
-            src => 'peri-seq 1 -i 0.5',
+            src => '[[prog]] 1 -i 0.5',
             src_plang => 'bash',
+            'x.doc.show_result' => 0,
         },
         {
             summary => 'Generate 01, 02, ..., 10',
-            src => 'peri-seq 1 10 -w',
+            src => '[[prog]] 1 10 -w',
             src_plang => 'bash',
+            'x.doc.show_result' => 0,
         },
         {
             summary => 'Generate 0001, 0002, ..., 0010',
-            src => 'peri-seq 1 10 -f "%04s"',
+            src => '[[prog]] 1 10 -f "%04s"',
             src_plang => 'bash',
+            'x.doc.show_result' => 0,
         },
         {
             summary => 'Generate -10, -9, -8, -7, -6 (limit 5 numbers)',
-            src => 'peri-seq --from -10 --to 0 -n 5',
+            src => '[[prog]] --from -10 --to 0 -n 5',
             src_plang => 'bash',
+            'x.doc.show_result' => 0,
         },
         {
             summary => 'Use with fsql',
-            src => q[peri-seq 1 100 --header num | fsql --add-tsv - --add-csv data.csv 'SELECT num, data1 FROM stdin LEFT JOIN data ON stdin.num=data.num'],
+            src => q{[[prog]] 1 100 --header num | fsql --add-tsv - --add-csv data.csv 'SELECT num, data1 FROM stdin LEFT JOIN data ON stdin.num=data.num'},
             src_plang => 'bash',
+            'x.doc.show_result' => 0,
         },
     ],
 };
