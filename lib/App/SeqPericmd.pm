@@ -113,6 +113,9 @@ _
     links => [
         {url=>{'prog:seq'}},
         {url=>{'prog:numseq'}},
+        {url=>{'prog:primes'}},
+        {url=>{'prog:primes.pl'}},
+        {url=>{'prog:primes-pericmd'}},
     ],
 };
 sub seq {
