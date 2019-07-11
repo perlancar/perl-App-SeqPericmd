@@ -1,9 +1,9 @@
-0.04    2016-09-28 (PERLANCAR)
+0.04    2016-09-28  Released-By: PERLANCAR
 
         - Rename utility from peri-seq to seq-pericmd.
 
 
-0.03    2015-09-03 (PERLANCAR)
+0.03    2015-09-03  Released-By: PERLANCAR
 
 	- No functional changes.
 
@@ -12,11 +12,11 @@
 	  requirement.
 
 
-0.02    2015-05-13 (PERLANCAR)
+0.02    2015-05-13  Released-By: PERLANCAR
 
 	- Use fixed floating point format to avoid showing round-off error.
 
 
-0.01    2015-05-13 (PERLANCAR)
+0.01    2015-05-13  Released-By: PERLANCAR
 
         - First release.
