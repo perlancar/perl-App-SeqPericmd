@@ -60,6 +60,9 @@ _
             cmdline_aliases => {f=>{}},
         },
     },
+    result => {
+        schema => ['array*', of=>'float*'],
+    },
     examples => [
         {
             summary => 'Generate whole numbers from 1 to 10 (1, 2, ..., 10)',
@@ -111,14 +114,14 @@ _
         },
     ],
     links => [
-        {url=>{'prog:seq'}},
-        {url=>{'prog:seq-pl'}},
-        {url=>{'prog:seq-intrange'}},
-        {url=>{'prog:seq-numseq'}},
-        {url=>{'prog:numseq'}},
-        {url=>{'prog:primes'}},
-        {url=>{'prog:primes.pl'}},
-        {url=>{'prog:primes-pericmd'}},
+        {url=>'prog:seq'},
+        {url=>'prog:seq-pl'},
+        {url=>'prog:seq-intrange'},
+        {url=>'prog:seq-numseq'},
+        {url=>'prog:numseq'},
+        {url=>'prog:primes'},
+        {url=>'prog:primes.pl'},
+        {url=>'prog:primes-pericmd'},
     ],
 };
 sub seq {
