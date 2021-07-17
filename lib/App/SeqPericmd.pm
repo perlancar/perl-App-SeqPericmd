@@ -112,6 +112,9 @@ _
     ],
     links => [
         {url=>{'prog:seq'}},
+        {url=>{'prog:seq-pl'}},
+        {url=>{'prog:seq-intrange'}},
+        {url=>{'prog:seq-numseq'}},
         {url=>{'prog:numseq'}},
         {url=>{'prog:primes'}},
         {url=>{'prog:primes.pl'}},
